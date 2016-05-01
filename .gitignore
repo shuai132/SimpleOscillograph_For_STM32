@@ -91,3 +91,7 @@ $RECYCLE.BIN/
 
 # Windows shortcuts
 *.lnk
+*.m51
+*.__i
+*.bak
+*.saved_uv4
