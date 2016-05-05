@@ -1,5 +1,6 @@
 /*
  *产生25Hz正弦波 PA4 PA5
+ *请自行确保一些参数结果为整数
  */
 
 #include <math.h>
@@ -17,37 +18,34 @@ void TIM2_Configuration(u32 frequency);
 
 int main(void)
 {
-	uint16_t i;
-	
-	NVIC_Configuration();
-	delay_init();	    	//延时函数初始化	  
-	uart_init(9600);	 	//串口初始化为9600
-	Dac1_Init();		  	//DAC通道1初始化	
+    uint16_t i;
 
-	TIM2_NVIC_Configuration();
-	TIM2_Configuration((u32)((float)25*360/STEP));
-	
-	for(i=0; i<360; i++)
-	{
-		sine_table1[i] = (uint16_t)((sin((i*PI)/180) + 1)*4095/2);
-		sine_table2[i] = (uint16_t)((sin((i*PI)/180 + PHA_DIFF) + 1)*4095/2);
-	}
-	while(1)
-	{
-	}										    
-}	
+    NVIC_Configuration();
+    delay_init();	    	//延时函数初始化
+    uart_init(9600);	 	//串口初始化为9600
+    Dac1_Init();		  	//DAC通道1初始化
 
+    TIM2_NVIC_Configuration();
+    TIM2_Configuration(25*360/STEP);
 
+    //生成数据
+    for(i=0; i<360; i++)
+    {
+        sine_table1[i] = (uint16_t)((sin((i*PI)/180) + 1)*4095/2);
+        sine_table2[i] = (uint16_t)((sin((i*PI)/180 + PHA_DIFF) + 1)*4095/2);
+    }
+    while(1)
+    {
+    }
+}
 
 void TIM2_NVIC_Configuration(void)
 {
-    NVIC_InitTypeDef NVIC_InitStructure; 
-    
-    //NVIC_PriorityGroupConfig(NVIC_PriorityGroup_2);
-	
-    NVIC_InitStructure.NVIC_IRQChannel = TIM2_IRQn;	  
+    NVIC_InitTypeDef NVIC_InitStructure;
+
+    NVIC_InitStructure.NVIC_IRQChannel = TIM2_IRQn;
     NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 1;
-    NVIC_InitStructure.NVIC_IRQChannelSubPriority = 0;	
+    NVIC_InitStructure.NVIC_IRQChannelSubPriority = 0;
     NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
     NVIC_Init(&NVIC_InitStructure);
 }
@@ -66,8 +64,8 @@ void TIM2_Configuration(u32 frequency)
     TIM_TimeBaseInit(TIM2, &TIM_TimeBaseStructure);
     TIM_ClearFlag(TIM2, TIM_FLAG_Update);							    		/* 清除溢出中断标志 */
     TIM_ITConfig(TIM2,TIM_IT_Update,ENABLE);
-    TIM_Cmd(TIM2, ENABLE);															
-    
+    TIM_Cmd(TIM2, ENABLE);
+
     RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM2 , ENABLE);
 }
 
