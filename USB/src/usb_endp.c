@@ -90,12 +90,12 @@ extern void process(u8 * rx);
 void EP3_OUT_Callback(void)
 {
   static uint8_t buffter[VIRTUAL_COM_PORT_DATA_SIZE] = {0};
-
+/*
   uint16_t USB_Rx_Cnt;
   
-  /* Get the received data buffer and update the counter */
+  //Get the received data buffer and update the counter
   USB_Rx_Cnt = USB_SIL_Read(EP3_OUT, buffter);
-  
+*/
   /* USB data will be immediately processed, this allow next USB traffic being 
   NAKed till the end of the USART Xfer */
 	

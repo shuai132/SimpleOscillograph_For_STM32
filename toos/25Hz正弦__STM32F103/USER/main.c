@@ -27,7 +27,7 @@ int main(void)
 
     TIM2_NVIC_Configuration();
     TIM2_Configuration(25*360/STEP);
-
+    
     //生成数据
     for(i=0; i<360; i++)
     {
@@ -55,6 +55,7 @@ void TIM2_Configuration(u32 frequency)
 {
     TIM_TimeBaseInitTypeDef  TIM_TimeBaseStructure;
     RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM2 , ENABLE);
+  
     TIM_DeInit(TIM2);
     TIM_TimeBaseStructure.TIM_Period=(uint16_t)(1000000ul/frequency - 1);	/* 自动重装载寄存器周期的值(计数值) */
     /* 累计 TIM_Period个频率后产生一个更新或者中断 */
@@ -65,7 +66,5 @@ void TIM2_Configuration(u32 frequency)
     TIM_ClearFlag(TIM2, TIM_FLAG_Update);							    		/* 清除溢出中断标志 */
     TIM_ITConfig(TIM2,TIM_IT_Update,ENABLE);
     TIM_Cmd(TIM2, ENABLE);
-
-    RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM2 , ENABLE);
 }
 

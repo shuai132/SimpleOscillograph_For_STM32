@@ -22,39 +22,40 @@ static void NVIC_Configuration(void)
 
 void PB1_Config(void)
 {
-	GPIO_InitTypeDef GPIO_InitStructure; 
-	
-	/* config the NVIC(PB1) */
-	NVIC_Configuration();
-	
-	/* config the extiline(PB1) clock and AFIO clock */
-	RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOB | RCC_APB2Periph_AFIO,ENABLE);
-	
-	/* EXTI line(PB1) mode config */
-	GPIO_EXTILineConfig(GPIO_PortSourceGPIOB, GPIO_PinSource1);
-	
-	/* EXTI line gpio config(PB1) */
+  GPIO_InitTypeDef GPIO_InitStructure; 
+  
+  /* config the NVIC(PB1) */
+  NVIC_Configuration();
+  
+  /* config the extiline(PB1) clock and AFIO clock */
+  RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOB | RCC_APB2Periph_AFIO,ENABLE);
+  
+  /* EXTI line(PB1) mode config */
+  GPIO_EXTILineConfig(GPIO_PortSourceGPIOB, GPIO_PinSource1);
+  
+  /* EXTI line gpio config(PB1) */
   GPIO_InitStructure.GPIO_Pin = GPIO_Pin_1;
-  GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IN_FLOATING;	 //浮空输入模式
+  GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IN_FLOATING;   //浮空输入模式
   GPIO_Init(GPIOB, &GPIO_InitStructure);
 }
 
 extern EXTITrigger_TypeDef TriggerMode;
+//注意：配置后即关闭了中断
 void EXTI_PB01_Config(EXTITrigger_TypeDef TM)
 {
-	EXTI_InitTypeDef EXTI_InitStructure;
-	
-	/* EXTI line(PB1) mode config */
+  EXTI_InitTypeDef EXTI_InitStructure;
+  
+  /* EXTI line(PB1) mode config */
   EXTI_InitStructure.EXTI_Line = EXTI_Line1;
   EXTI_InitStructure.EXTI_Mode = EXTI_Mode_Interrupt;
-  EXTI_InitStructure.EXTI_Trigger = TM; 		     //中断触发模式
+  EXTI_InitStructure.EXTI_Trigger = TM;          //中断触发模式
   EXTI_InitStructure.EXTI_LineCmd = ENABLE;
   EXTI_Init(&EXTI_InitStructure);
-	
-	EXTI_InitStructure.EXTI_LineCmd = DISABLE;
+  
+  EXTI_InitStructure.EXTI_LineCmd = DISABLE;
   EXTI_Init(&EXTI_InitStructure);
-	
-	TriggerMode = TM;  //更新全局变量
+  
+  TriggerMode = TM;  //更新全局变量
 }
 
 /*
@@ -63,27 +64,28 @@ void EXTI_PB01_Config(EXTITrigger_TypeDef TM)
  * 输入  ：无
  * 输出  ：无
  * 调用  ：外部调用
-
-
+ */
 void EXTI_PB01_control(FunctionalState state)
 {
    if(state == ENABLE)
-		 EXTI->IMR|=1<<1;			//不屏蔽line1上的中断
-	 
+     EXTI->IMR|=1<<1;     //不屏蔽line1上的中断
+   
    else
-		 EXTI->IMR&=~(1<<1);	//屏蔽line1上的中断  
+     EXTI->IMR&=~(1<<1);  //屏蔽line1上的中断  
 }
- */
 
-//这句是不行的 好像不仅仅关闭了exti line，而且关闭了定期器的中断
+/*
+//请看EXTI_Init()内部实现，此处还是使用上面效率更高
 void EXTI_PB01_control(FunctionalState state)
 {
-	EXTI_InitTypeDef EXTI_InitStructure;
-	
-	// EXTI line(PB1) mode config	
+  EXTI_InitTypeDef EXTI_InitStructure;
+  
+  // EXTI line(PB1) mode config  
   EXTI_InitStructure.EXTI_Line = EXTI_Line1;
   EXTI_InitStructure.EXTI_Mode = EXTI_Mode_Interrupt;
   EXTI_InitStructure.EXTI_Trigger = TriggerMode;
   EXTI_InitStructure.EXTI_LineCmd = state;
   EXTI_Init(&EXTI_InitStructure);
 }
+*/
+
