@@ -164,9 +164,13 @@ void on_send_finish(void)
       //开始一次采集，用于调试
       START_TIMER_NEW_SCAN;
     }
+    else if(trigger_mode == 4)
+    {
+      EXTI_DISABLE;
+    }
     else
     {
-      EXTI_ENABLE;  //send finish enable_exti
+      EXTI_ENABLE;
     }
   }
 }
