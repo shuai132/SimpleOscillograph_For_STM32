@@ -5,4 +5,4 @@
 
 ##说明
   1.本程序使用STM32的USB开发了虚拟串口，更节约了硬件成本，本身就可以与上位机通信了。当然也可以配置宏并重新编译使用串口与上位机交互（具体见源代码MYDEF.H）。<br>
-  2.需要配合基于LabVIEW开发的上位机程序使用。
+  2.需要配合基于LabVIEW开发的上位机程序使用。<br>LabVIEW源码地址：https://github.com/shuai132/SimpleOscillograph_For_LabVIEW
