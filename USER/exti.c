@@ -1,3 +1,17 @@
+/************************SimpleOscillograph For STM32******************************
+ * 文件名  ：exti.c
+ * 描述    ：SimpleOscillograph For STM32      
+ * 平台    ：STM32核心板
+ * 库版本  ：ST3.5.0
+ *
+ * 作者    ：刘帅
+ * 日期    ：2015-10-24
+ * 修改    ：2016/04/14  增加边沿触发
+ * 修改    ：2016/07/20  更改EXTI_Control()使用NVIC_EnableIRQ() & 更正缩进
+ *
+ * 注意    ：中断优先级：串口0-0.0 > 定时器2-1.0 > 外部中断PB01-2.0
+**********************************************************************************/
+
 #include "exti.h"
 
 /*
@@ -20,7 +34,7 @@ static void NVIC_Configuration(void)
 }
 
 
-void PB1_Config(void)
+void EXTI_PB01_Init(void)
 {
   GPIO_InitTypeDef GPIO_InitStructure; 
   
@@ -41,7 +55,7 @@ void PB1_Config(void)
 
 extern EXTITrigger_TypeDef TriggerMode;
 //注意：配置后即关闭了中断
-void EXTI_PB01_Config(EXTITrigger_TypeDef TM)
+void EXTI_Config(EXTITrigger_TypeDef TM)
 {
   EXTI_InitTypeDef EXTI_InitStructure;
   
@@ -59,33 +73,17 @@ void EXTI_PB01_Config(EXTITrigger_TypeDef TM)
 }
 
 /*
- * 函数名：EXTI_PB01_control
+ * 函数名：EXTI_Control
  * 描述  ：打开或关闭中断
  * 输入  ：无
  * 输出  ：无
  * 调用  ：外部调用
  */
-void EXTI_PB01_control(FunctionalState state)
+void EXTI_Control(FunctionalState state)
 {
    if(state == ENABLE)
-     EXTI->IMR|=1<<1;     //不屏蔽line1上的中断
+     NVIC_EnableIRQ(EXTI1_IRQn);    //不屏蔽line1上的中断
    
    else
-     EXTI->IMR&=~(1<<1);  //屏蔽line1上的中断  
+     NVIC_DisableIRQ(EXTI1_IRQn);   //屏蔽line1上的中断  
 }
-
-/*
-//请看EXTI_Init()内部实现，此处还是使用上面效率更高
-void EXTI_PB01_control(FunctionalState state)
-{
-  EXTI_InitTypeDef EXTI_InitStructure;
-  
-  // EXTI line(PB1) mode config  
-  EXTI_InitStructure.EXTI_Line = EXTI_Line1;
-  EXTI_InitStructure.EXTI_Mode = EXTI_Mode_Interrupt;
-  EXTI_InitStructure.EXTI_Trigger = TriggerMode;
-  EXTI_InitStructure.EXTI_LineCmd = state;
-  EXTI_Init(&EXTI_InitStructure);
-}
-*/
-

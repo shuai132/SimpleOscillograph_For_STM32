@@ -313,7 +313,7 @@
             <Optim>1</Optim>
             <oTime>0</oTime>
             <SplitLS>0</SplitLS>
-            <OneElfS>0</OneElfS>
+            <OneElfS>1</OneElfS>
             <Strict>0</Strict>
             <EnumInt>0</EnumInt>
             <PlainCh>0</PlainCh>
@@ -416,9 +416,9 @@
               <FilePath>.\led.c</FilePath>
             </File>
             <File>
-              <FileName>Time.c</FileName>
+              <FileName>timer.c</FileName>
               <FileType>1</FileType>
-              <FilePath>.\Time.c</FilePath>
+              <FilePath>.\timer.c</FilePath>
             </File>
             <File>
               <FileName>Queue.c</FileName>

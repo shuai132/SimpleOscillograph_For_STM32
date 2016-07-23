@@ -2,8 +2,8 @@
 #define	__EXTI_H
 
 #include "stm32f10x.h"
-void PB1_Config(void);
-void EXTI_PB01_Config(EXTITrigger_TypeDef TM);
-void EXTI_PB01_control(FunctionalState state);
+void EXTI_PB01_Init(void);
+void EXTI_Config(EXTITrigger_TypeDef TM);
+void EXTI_Control(FunctionalState state);
 
 #endif /* __XXX_H */

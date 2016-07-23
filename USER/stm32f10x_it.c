@@ -26,7 +26,7 @@
 #include <string.h>
 #include "stm32f10x_it.h"
 #include "mydef.h"  //num_of_data
-#include "Time.h"
+#include "timer.h"
 #include "led.h"
 #include "usart1.h"
 
@@ -45,8 +45,8 @@ extern u8 scan_mode;
 extern volatile u8 trigger_mode;
 
 /* Private function prototypes -----------------------------------------------*/
-extern void EXTI_PB01_Config(EXTITrigger_TypeDef TM);
-extern void EXTI_PB01_control(FunctionalState state);
+extern void EXTI_Config(EXTITrigger_TypeDef TM);
+extern void EXTI_Control(FunctionalState state);
 /* Private functions ---------------------------------------------------------*/
 
 /******************************************************************************/
@@ -164,12 +164,19 @@ void SysTick_Handler(void)
   * @retval : None
   */
 extern volatile u16 value_i;
-extern __IO uint16_t ADC_ConvertedValue[3];
-extern __IO u16 C1_value[num_of_data];
-extern __IO u16 C2_value[num_of_data];
-extern __IO u16 C3_value[num_of_data];
-extern void send(void);
+extern volatile uint16_t ADC_ConvertedValue[];
+#if USE_CHANNEL_C1
+extern volatile u16 C1_value[];
+#endif
+#if USE_CHANNEL_C2
+extern volatile u16 C2_value[];
+#endif
+#if USE_CHANNEL_C3
+extern volatile u16 C3_value[];
+#endif
 extern volatile u8 SCAN_IS_OK;
+
+extern void send(void);
 
 void TIM2_IRQHandler(void)
 {
@@ -177,9 +184,15 @@ void TIM2_IRQHandler(void)
   {
     TIM_ClearITPendingBit(TIM2 , TIM_FLAG_Update);
 
-    C1_value[value_i] = ADC_ConvertedValue[0];  // 读取转换的AD值
-    C2_value[value_i] = ADC_ConvertedValue[1];  // 读取转换的AD值
-    C3_value[value_i] = ADC_ConvertedValue[2];  // 读取转换的AD值
+#if USE_CHANNEL_C1
+        C1_value[value_i] = ADC_ConvertedValue[0];  // 读取转换的AD值
+#endif
+#if USE_CHANNEL_C2
+        C2_value[value_i] = ADC_ConvertedValue[1];  // 读取转换的AD值
+#endif
+#if USE_CHANNEL_C3
+        C3_value[value_i] = ADC_ConvertedValue[2];  // 读取转换的AD值
+#endif
 
     if (value_i++ == num_of_data - 1)
     {
@@ -194,10 +207,10 @@ void TIM2_IRQHandler(void)
 /* I/O线中断，中断线为PB01 */
 void EXTI1_IRQHandler(void)
 {
-  if (EXTI_GetITStatus(EXTI_Line1) != RESET) //确保是否产生了EXTI Line中断
+  if (EXTI_GetITStatus(EXTI_Line1) != RESET)    //确保是否产生了EXTI Line中断
   {
-    EXTI_DISABLE;                           //禁止触发，发送完成后或者abort(且scan_mode == 0)后再次打开
-    EXTI_ClearITPendingBit(EXTI_Line1);     //清除中断标志位 (注意位置）
+    EXTI_DISABLE;                               //禁止触发，发送完成后或者abort(且scan_mode == 0)后再次打开
+    EXTI_ClearITPendingBit(EXTI_Line1);         //清除中断标志位 (注意位置）
 
     //使用定时器精确采样，支持三通道
     START_TIMER_NEW_SCAN;
@@ -208,9 +221,15 @@ void start_new_scan(void)
 {
   is_abort = 1;
   value_i = 0;
-  C1_value[0] = ADC_ConvertedValue[0];  //先采集第一组数据
-  C2_value[0] = ADC_ConvertedValue[1];  //先采集第一组数据
-  C3_value[0] = ADC_ConvertedValue[2];  //先采集第一组数据
+#if USE_CHANNEL_C1
+    C1_value[0] = ADC_ConvertedValue[0];  //先采集第一组数据
+#endif
+#if USE_CHANNEL_C2
+    C2_value[0] = ADC_ConvertedValue[1];  //先采集第一组数据
+#endif
+#if USE_CHANNEL_C3
+    C3_value[0] = ADC_ConvertedValue[2];  //先采集第一组数据
+#endif
   value_i++;
 
   START_TIMER;
@@ -280,13 +299,13 @@ void process(u8 * rx)
     //设置采样率
     switch (num)
     {
-    case 0 : FS = 100;    TIM2_Configuration(FS); break; //最小为100Hz
-    case 1 : FS = 1000;   TIM2_Configuration(FS); break;
-    case 2 : FS = 10000;  TIM2_Configuration(FS); break;
-    case 3 : FS = 100000; TIM2_Configuration(FS); break;
-    case 4 : FS = 250000; TIM2_Configuration(FS); break;
-    case 5 : FS = 500000; TIM2_Configuration(FS); break;
-    case 6 : FS = 500000; TIM2_Configuration(FS); break;
+    case 0 : FS = 100;      TIM_Configuration(FS); break; //最小为100Hz
+    case 1 : FS = 1000;     TIM_Configuration(FS); break;
+    case 2 : FS = 10000;    TIM_Configuration(FS); break;
+    case 3 : FS = 100000;   TIM_Configuration(FS); break;
+    case 4 : FS = 250000;   TIM_Configuration(FS); break;
+    case 5 : FS = 500000;   TIM_Configuration(FS); break;
+    case 6 : FS = 500000;   TIM_Configuration(FS); break;
     }
 
     START_TIMER_NEW_SCAN;
@@ -305,15 +324,15 @@ void process(u8 * rx)
     case 1 :
       EXTI_CONFIG_Rising;
       EXTI_ENABLE;
-      break;  //up
+      break;  //Rising
     case 2 :
       EXTI_CONFIG_Falling;
       EXTI_ENABLE;
-      break;  //dowm
+      break;  //Falling
     case 3 :
       EXTI_CONFIG_Rising_Falling;
       EXTI_ENABLE;
-      break;  //up and down
+      break;  //Rising_Falling
     case 4 :
       EXTI_DISABLE;
       break;  //
