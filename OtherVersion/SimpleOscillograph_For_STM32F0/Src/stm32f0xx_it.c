@@ -215,7 +215,7 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
     EXTI_DISABLE;                               //禁止触发，发送完成后或者abort(且scan_mode == 0)后再次打开
     
     //使用定时器精确采样，支持三通道
-    START_TIMER_NEW_SCAN;
+    START_NEW_SCAN;
 }
 
 void start_new_scan(void)
@@ -290,7 +290,7 @@ void process(u8 * rx)
         case 6 : FS = 500000;   TIM_ConfigFrequency(FS); break;
         }
 
-        START_TIMER_NEW_SCAN;
+        START_NEW_SCAN;
     }
     else if (!strcmp(t, "TM"))
     {
@@ -301,7 +301,7 @@ void process(u8 * rx)
         {
         case 0 :
             //auto
-            START_TIMER_NEW_SCAN;
+            START_NEW_SCAN;
             break;
         case 1 :
             EXTI_CONFIG_Rising;
@@ -335,7 +335,7 @@ void process(u8 * rx)
         else
         {
             //采集一次(发送完成会自动打开中断)
-            START_TIMER_NEW_SCAN;   //开启定时器采集数据
+            START_NEW_SCAN;   //开启定时器采集数据
         }
     }
     else if (!strcmp(t, "AB"))
@@ -350,7 +350,7 @@ void process(u8 * rx)
     }
     else if (!strcmp(t, "TG"))
     {
-        START_TIMER_NEW_SCAN;
+        START_NEW_SCAN;
     }
 }
 

@@ -143,7 +143,7 @@ int main(void)
     PRINTF_LABVIEW("AD:%d\r\n", ADC_B);  //adc位数
 
     //开始一次采集，用于调试
-    START_TIMER_NEW_SCAN;
+    START_NEW_SCAN;
 
   /* USER CODE END 2 */
 
@@ -254,9 +254,8 @@ void on_send_finish(void)
     {
         if(trigger_mode == 0)
         {
-            //发送完成自动触发
-            //开始一次采集，用于调试
-            START_TIMER_NEW_SCAN;
+            //自动开始新的采集
+            START_NEW_SCAN;
         }
         else if(trigger_mode == 4)
         {

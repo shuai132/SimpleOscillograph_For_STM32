@@ -37,7 +37,7 @@
 //¹Ø±Õ¶¨Ê±Æ÷
 #define STOP_TIMER                      HAL_TIM_Base_Stop_IT(&htim1)
 
-#define START_TIMER_NEW_SCAN            start_new_scan();
+#define START_NEW_SCAN                  start_new_scan();
 
 #define EXTI_CONFIG_Rising_Falling      EXTI_Config(GPIO_MODE_IT_RISING_FALLING)
 #define EXTI_CONFIG_Rising              EXTI_Config(GPIO_MODE_IT_RISING)

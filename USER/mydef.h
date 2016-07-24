@@ -37,7 +37,7 @@
 //¹Ø±Õ¶¨Ê±Æ÷
 #define STOP_TIMER                      TIM_Cmd(TIM2, DISABLE)
 
-#define START_TIMER_NEW_SCAN            start_new_scan();
+#define START_NEW_SCAN                  start_new_scan();
 
 #define EXTI_CONFIG_Rising_Falling      EXTI_Config(EXTI_Trigger_Rising_Falling)
 #define EXTI_CONFIG_Rising              EXTI_Config(EXTI_Trigger_Rising)

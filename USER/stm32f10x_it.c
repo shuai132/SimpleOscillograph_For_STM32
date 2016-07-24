@@ -213,7 +213,7 @@ void EXTI1_IRQHandler(void)
     EXTI_ClearITPendingBit(EXTI_Line1);         //清除中断标志位 (注意位置）
 
     //使用定时器精确采样，支持三通道
-    START_TIMER_NEW_SCAN;
+    START_NEW_SCAN;
   }
 }
 
@@ -308,7 +308,7 @@ void process(u8 * rx)
     case 6 : FS = 500000;   TIM_Configuration(FS); break;
     }
 
-    START_TIMER_NEW_SCAN;
+    START_NEW_SCAN;
   }
   else if (!strcmp(t, "TM"))
   {
@@ -319,7 +319,7 @@ void process(u8 * rx)
     {
     case 0 :
       //auto
-      START_TIMER_NEW_SCAN;
+      START_NEW_SCAN;
       break;
     case 1 :
       EXTI_CONFIG_Rising;
@@ -353,7 +353,7 @@ void process(u8 * rx)
     else
     {
       //采集一次(发送完成会自动打开中断)
-      START_TIMER_NEW_SCAN;   //开启定时器采集数据
+      START_NEW_SCAN;   //开启定时器采集数据
     }
   }
   else if (!strcmp(t, "AB"))
@@ -368,6 +368,6 @@ void process(u8 * rx)
   }
   else if (!strcmp(t, "TG"))
   {
-    START_TIMER_NEW_SCAN;
+    START_NEW_SCAN;
   }
 }
