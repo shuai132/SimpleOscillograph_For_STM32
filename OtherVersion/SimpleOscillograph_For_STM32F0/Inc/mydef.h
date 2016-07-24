@@ -21,7 +21,7 @@
 //上传数据
 #define PRINTF_LABVIEW(format, ...)     printf(format, ##__VA_ARGS__)
 
-#define num_of_data 1024
+#define num_of_data                     1024
 
 #define USE_CHANNEL_C1                  1
 #define USE_CHANNEL_C2                  0

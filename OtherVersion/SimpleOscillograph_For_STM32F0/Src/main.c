@@ -122,6 +122,9 @@ int main(void)
     /* enable adc1 and config adc1 to dma mode */
     HAL_ADC_Start_DMA(&hadc, (uint32_t*)ADC_ConvertedValue, 3);
     
+    /* 关闭DMA中断 否则会非常非常浪费资源 CubeMX没有禁用的选项所以为了移植性在这里关闭 */
+    HAL_NVIC_DisableIRQ(DMA1_Channel1_IRQn);
+    
     HAL_UART_Receive_DMA(&huart1, (uint8_t *)&no_use, 1);
     
     /* LED */
@@ -236,7 +239,7 @@ void send(void)
     }
     while((++i < num_of_data) && (is_abort == 0) && (scan_mode == 0));
 
-    PRINTF_LABVIEW("FN:OK\r\n");
+    PRINTF_LABVIEW("FN:OK\r\n");    //也利用这次发送为ADC启动转换延时到稳定
     on_send_finish();
 }
 
