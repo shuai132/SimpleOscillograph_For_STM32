@@ -39,76 +39,79 @@
 
 /* USER CODE END 0 */
 
-TIM_HandleTypeDef htim16;
+TIM_HandleTypeDef htim1;
 
-/* TIM16 init function */
-void MX_TIM16_Init(void)
+/* TIM1 init function */
+void MX_TIM1_Init(void)
 {
+  TIM_ClockConfigTypeDef sClockSourceConfig;
+  TIM_MasterConfigTypeDef sMasterConfig;
 
-  htim16.Instance = TIM16;
-  htim16.Init.Prescaler = 47;
-  htim16.Init.CounterMode = TIM_COUNTERMODE_UP;
-  htim16.Init.Period = 0;
-  htim16.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
-  htim16.Init.RepetitionCounter = 0;
-  HAL_TIM_Base_Init(&htim16);
+  htim1.Instance = TIM1;
+  htim1.Init.Prescaler = (48-1);
+  htim1.Init.CounterMode = TIM_COUNTERMODE_UP;
+  htim1.Init.Period = 0;
+  htim1.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
+  htim1.Init.RepetitionCounter = 0;
+  HAL_TIM_Base_Init(&htim1);
+
+  sClockSourceConfig.ClockSource = TIM_CLOCKSOURCE_INTERNAL;
+  HAL_TIM_ConfigClockSource(&htim1, &sClockSourceConfig);
+
+  sMasterConfig.MasterOutputTrigger = TIM_TRGO_RESET;
+  sMasterConfig.MasterSlaveMode = TIM_MASTERSLAVEMODE_DISABLE;
+  HAL_TIMEx_MasterConfigSynchronization(&htim1, &sMasterConfig);
 
 }
 
 void HAL_TIM_Base_MspInit(TIM_HandleTypeDef* htim_base)
 {
 
-  if(htim_base->Instance==TIM16)
+  if(htim_base->Instance==TIM1)
   {
-  /* USER CODE BEGIN TIM16_MspInit 0 */
+  /* USER CODE BEGIN TIM1_MspInit 0 */
 
-  /* USER CODE END TIM16_MspInit 0 */
+  /* USER CODE END TIM1_MspInit 0 */
     /* Peripheral clock enable */
-    __HAL_RCC_TIM16_CLK_ENABLE();
+    __HAL_RCC_TIM1_CLK_ENABLE();
 
     /* Peripheral interrupt init */
-    HAL_NVIC_SetPriority(TIM16_IRQn, 2, 0);
-    HAL_NVIC_EnableIRQ(TIM16_IRQn);
-  /* USER CODE BEGIN TIM16_MspInit 1 */
+    HAL_NVIC_SetPriority(TIM1_BRK_UP_TRG_COM_IRQn, 2, 0);
+    HAL_NVIC_EnableIRQ(TIM1_BRK_UP_TRG_COM_IRQn);
+  /* USER CODE BEGIN TIM1_MspInit 1 */
 
-  /* USER CODE END TIM16_MspInit 1 */
+  /* USER CODE END TIM1_MspInit 1 */
   }
 }
 
 void HAL_TIM_Base_MspDeInit(TIM_HandleTypeDef* htim_base)
 {
 
-  if(htim_base->Instance==TIM16)
+  if(htim_base->Instance==TIM1)
   {
-  /* USER CODE BEGIN TIM16_MspDeInit 0 */
+  /* USER CODE BEGIN TIM1_MspDeInit 0 */
 
-  /* USER CODE END TIM16_MspDeInit 0 */
+  /* USER CODE END TIM1_MspDeInit 0 */
     /* Peripheral clock disable */
-    __HAL_RCC_TIM16_CLK_DISABLE();
+    __HAL_RCC_TIM1_CLK_DISABLE();
 
     /* Peripheral interrupt Deinit*/
-    HAL_NVIC_DisableIRQ(TIM16_IRQn);
+    HAL_NVIC_DisableIRQ(TIM1_BRK_UP_TRG_COM_IRQn);
 
   }
-  /* USER CODE BEGIN TIM16_MspDeInit 1 */
+  /* USER CODE BEGIN TIM1_MspDeInit 1 */
 
-  /* USER CODE END TIM16_MspDeInit 1 */
+  /* USER CODE END TIM1_MspDeInit 1 */
 } 
 
 /* USER CODE BEGIN 1 */
 /**
  *1us中断一次
- *TIM_Period--1000   TIM_Prescaler--71 -->中断周期为1ms
 **/
-void TIM_Configuration(u32 frequency)
+void TIM_ConfigFrequency(u32 frequency)
 {
-  htim16.Instance = TIM16;
-  htim16.Init.Prescaler = (48-1);
-  htim16.Init.CounterMode = TIM_COUNTERMODE_UP;
-  htim16.Init.Period = (uint16_t)(1000000ul/frequency - 1);
-  htim16.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
-  htim16.Init.RepetitionCounter = 0;
-  HAL_TIM_Base_Init(&htim16);
+  htim1.Init.Period = (uint16_t)(1000000ul/frequency - 1);
+  HAL_TIM_Base_Init(&htim1);
 }
 /* USER CODE END 1 */
 

@@ -55,9 +55,8 @@ extern void EXTI_Control(FunctionalState state);
 
 /* External variables --------------------------------------------------------*/
 extern DMA_HandleTypeDef hdma_adc;
-extern TIM_HandleTypeDef htim16;
+extern TIM_HandleTypeDef htim1;
 extern DMA_HandleTypeDef hdma_usart1_rx;
-extern UART_HandleTypeDef huart1;
 
 /******************************************************************************/
 /*            Cortex-M0 Processor Interruption and Exception Handlers         */ 
@@ -158,31 +157,17 @@ void DMA1_Channel2_3_IRQHandler(void)
 }
 
 /**
-* @brief This function handles TIM16 global interrupt.
+* @brief This function handles TIM1 break, update, trigger and commutation interrupts.
 */
-void TIM16_IRQHandler(void)
+void TIM1_BRK_UP_TRG_COM_IRQHandler(void)
 {
-  /* USER CODE BEGIN TIM16_IRQn 0 */
+  /* USER CODE BEGIN TIM1_BRK_UP_TRG_COM_IRQn 0 */
 
-  /* USER CODE END TIM16_IRQn 0 */
-  HAL_TIM_IRQHandler(&htim16);
-  /* USER CODE BEGIN TIM16_IRQn 1 */
+  /* USER CODE END TIM1_BRK_UP_TRG_COM_IRQn 0 */
+  HAL_TIM_IRQHandler(&htim1);
+  /* USER CODE BEGIN TIM1_BRK_UP_TRG_COM_IRQn 1 */
 
-  /* USER CODE END TIM16_IRQn 1 */
-}
-
-/**
-* @brief This function handles USART1 global interrupt.
-*/
-void USART1_IRQHandler(void)
-{
-  /* USER CODE BEGIN USART1_IRQn 0 */
-
-  /* USER CODE END USART1_IRQn 0 */
-  HAL_UART_IRQHandler(&huart1);
-  /* USER CODE BEGIN USART1_IRQn 1 */
-    
-  /* USER CODE END USART1_IRQn 1 */
+  /* USER CODE END TIM1_BRK_UP_TRG_COM_IRQn 1 */
 }
 
 /* USER CODE BEGIN 1 */
@@ -203,7 +188,7 @@ extern void send(void);
 
 void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 {
-    if(htim == &htim16)
+    if(htim == &htim1)
     {
 #if USE_CHANNEL_C1
         C1_value[value_i] = ADC_ConvertedValue[0];  // 读取转换的AD值
@@ -221,10 +206,6 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
             SCAN_IS_OK = 1;   //send
             LED(OFF);
         }
-    }
-    else
-    {
-        HAL_IncTick();
     }
 }
 
@@ -300,13 +281,13 @@ void process(u8 * rx)
         //设置采样率
         switch (num)
         {
-        case 0 : FS = 100;      TIM_Configuration(FS); break; //最小为100Hz
-        case 1 : FS = 1000;     TIM_Configuration(FS); break;
-        case 2 : FS = 10000;    TIM_Configuration(FS); break;
-        case 3 : FS = 100000;   TIM_Configuration(FS); break;
-        case 4 : FS = 250000;   TIM_Configuration(FS); break;
-        case 5 : FS = 500000;   TIM_Configuration(FS); break;
-        case 6 : FS = 500000;   TIM_Configuration(FS); break;
+        case 0 : FS = 100;      TIM_ConfigFrequency(FS); break; //最小为100Hz
+        case 1 : FS = 1000;     TIM_ConfigFrequency(FS); break;
+        case 2 : FS = 10000;    TIM_ConfigFrequency(FS); break;
+        case 3 : FS = 100000;   TIM_ConfigFrequency(FS); break;
+        case 4 : FS = 250000;   TIM_ConfigFrequency(FS); break;
+        case 5 : FS = 500000;   TIM_ConfigFrequency(FS); break;
+        case 6 : FS = 500000;   TIM_ConfigFrequency(FS); break;
         }
 
         START_TIMER_NEW_SCAN;

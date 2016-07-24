@@ -15,3 +15,5 @@
 *.obj
 *.m51
 *.axf
+*.mxproject
+*.uvoptx

@@ -1,6 +1,6 @@
 [PreviousGenFiles]
-HeaderPath=E:/Program/Program/重要工程/多功能示波器/SimpleOscillograph_For_STM32F0/Inc
-SourcePath=E:/Program/Program/重要工程/多功能示波器/SimpleOscillograph_For_STM32F0/Src
+HeaderPath=E:/Program/Program/重要工程/多功能示波器/SimpleOscillograph_For_STM32/OtherVersion/SimpleOscillograph_For_STM32F0/Inc
+SourcePath=E:/Program/Program/重要工程/多功能示波器/SimpleOscillograph_For_STM32/OtherVersion/SimpleOscillograph_For_STM32F0/Src
 SourceFiles=gpio.h;dma.h;tim.h;usart.h;stm32f0xx_it.h;stm32f0xx_hal_conf.h;mxconstants.h;gpio.c;dma.c;tim.c;usart.c;stm32f0xx_it.c;stm32f0xx_hal_msp.c;main.c;FreeRTOSConfig.h;freertos.c;stm32f0xx_hal_timebase_TIM.c;adc.h;adc.c;rtc.h;rtc.c;
 HeaderFiles=gpio.h;dma.h;tim.h;usart.h;stm32f0xx_it.h;stm32f0xx_hal_conf.h;mxconstants.h;FreeRTOSConfig.h;adc.h;rtc.h;
 

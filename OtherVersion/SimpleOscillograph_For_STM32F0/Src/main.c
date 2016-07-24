@@ -1,17 +1,3 @@
-/************************SimpleOscillograph For STM32******************************
- * 文件名  ：main.c
- * 描述    ：SimpleOscillograph For STM32F0    示波器STM32程序
- * 平台    ：STM32f030核心板
- * 库版本  ：HAL
- *
- * 作者    ：刘帅
- * 邮箱    ：shuai132@outlook.com
- 
- * 日期    ：2016/07/23    移植到STM32F0  使用HAL库更加方便STM32系列的移植
- *
- * 注意    ：中断优先级：串口0-0.0 > 定时器2-1.0 > 外部中断PB01-2.0
-**********************************************************************************/
-
 /**
   ******************************************************************************
   * File Name          : main.c
@@ -127,7 +113,7 @@ int main(void)
   MX_DMA_Init();
   MX_USART1_UART_Init();
   MX_ADC_Init();
-  MX_TIM16_Init();
+  MX_TIM1_Init();
 
   /* USER CODE BEGIN 2 */
     SystemCoreClockUpdate();
@@ -142,7 +128,7 @@ int main(void)
     LED(ON);
 
     /* TIM 定时配置 */
-    TIM_Configuration(FS);  //初始FS(100KHz)
+    TIM_ConfigFrequency(FS);  //初始FS(100KHz)
     
     //初始化关闭触发中断
     EXTI_DISABLE;

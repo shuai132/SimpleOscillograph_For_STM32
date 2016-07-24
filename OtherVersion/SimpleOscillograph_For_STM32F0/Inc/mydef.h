@@ -33,9 +33,9 @@
 #define EXTI_DISABLE                    EXTI_Control(DISABLE)
 
 //开启定时器
-#define START_TIMER                     HAL_TIM_Base_Start_IT(&htim16)  //开启定时器
+#define START_TIMER                     HAL_TIM_Base_Start_IT(&htim1)  //开启定时器
 //关闭定时器
-#define STOP_TIMER                      HAL_TIM_Base_Stop_IT(&htim16)
+#define STOP_TIMER                      HAL_TIM_Base_Stop_IT(&htim1)
 
 #define START_TIMER_NEW_SCAN            start_new_scan();
 

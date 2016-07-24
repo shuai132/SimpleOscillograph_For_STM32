@@ -332,7 +332,7 @@
               <MiscControls>--C99</MiscControls>
               <Define>USE_HAL_DRIVER,STM32F030x6</Define>
               <Undefine></Undefine>
-              <IncludePath>../Inc;          ../Drivers/STM32F0xx_HAL_Driver/Inc;          ../Drivers/STM32F0xx_HAL_Driver/Inc/Legacy;          ../Drivers/CMSIS/Include;          ../Drivers/CMSIS/Device/ST/STM32F0xx/Include</IncludePath>
+              <IncludePath>../Inc;              ../Drivers/STM32F0xx_HAL_Driver/Inc;              ../Drivers/STM32F0xx_HAL_Driver/Inc/Legacy;              ../Drivers/CMSIS/Include;              ../Drivers/CMSIS/Device/ST/STM32F0xx/Include</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
