@@ -119,11 +119,11 @@ int main(void)
     SystemCoreClockUpdate();
     printf("SystemCoreClock = %d\r\n", SystemCoreClock);
     
+    /* 先关闭DMA中断 否则会非常非常浪费资源 甚至死机 CubeMX没有禁用的选项所以为了移植性在这里关闭 */
+    HAL_NVIC_DisableIRQ(DMA2_Stream0_IRQn);
+    
     /* enable adc1 and config adc1 to dma mode */
     HAL_ADC_Start_DMA(&hadc1, (uint32_t*)ADC_ConvertedValue, 3);
-    
-    /* 关闭DMA中断 否则会非常非常浪费资源 CubeMX没有禁用的选项所以为了移植性在这里关闭 */
-    HAL_NVIC_DisableIRQ(DMA2_Stream0_IRQn);
     
     HAL_UART_Receive_DMA(&huart1, (uint8_t *)&no_use, 1);
     
