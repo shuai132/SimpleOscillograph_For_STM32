@@ -1,4 +1,7 @@
-﻿# SimpleOscillograph_For_STM32
+# SimpleOscillograph_For_STM32
+
+**已废弃**  
+这是大学时候做的。又做了个更高效的版本，见：https://github.com/shuai132/ScopeMCU
 
 ## 功能
 使用STM32作为核心器件，实现三通道示波器，在上位机处理和显示。支持多种触发方式，支持实时采集，最大三通道采样。可以对信号进行加窗处理，并具有FFT频谱分析等功能。
